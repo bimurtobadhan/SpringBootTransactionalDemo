@@ -1,7 +1,7 @@
 package com.bimurto.springBootTransactionalDemo;
 
 import com.bimurto.springBootTransactionalDemo.dao.UserDao;
-import com.bimurto.springBootTransactionalDemo.dao.UserDaoImpl;
+import com.bimurto.springBootTransactionalDemo.dao.UserDaoImplNoInterface;
 import com.bimurto.springBootTransactionalDemo.domain.TestUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -17,6 +17,9 @@ public class SpingTransactionalDemoApplication implements ApplicationRunner{
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserDaoImplNoInterface userDaoImpl;
+
     private Random random = new Random();
 
     public static void main(String[] args) {
@@ -25,8 +28,7 @@ public class SpingTransactionalDemoApplication implements ApplicationRunner{
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
-//        userDao.saveWithSameClassTrxTransactionalMethodCall(TestUser.builder()
+//        userDaoImpl.saveWithTransactionMethodWithException(TestUser.builder()
 //                            .name("Name" + random.nextInt())
 //                            .build()
 //                );

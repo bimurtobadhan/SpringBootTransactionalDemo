@@ -1,6 +1,7 @@
 package com.bimurto.springBootTransactionalDemo;
 
 import com.bimurto.springBootTransactionalDemo.dao.UserDao;
+import com.bimurto.springBootTransactionalDemo.dao.UserDaoImplNoInterface;
 import com.bimurto.springBootTransactionalDemo.domain.TestUser;
 import com.bimurto.springBootTransactionalDemo.repo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,9 @@ public class SpringBootTransactionalDemoTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserDaoImplNoInterface userDaoImpl;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,7 +46,7 @@ public class SpringBootTransactionalDemoTest {
 
         TestUser testUser = userRepository.findByName(name);
         Assert.assertNull("TestUser should be null", testUser);
-        log.info("Trnsactional is working!!!");
+        log.info("@Trnsactional is working!!!");
     }
 
     @Test
@@ -59,6 +63,40 @@ public class SpringBootTransactionalDemoTest {
 
         TestUser testUser = userRepository.findByName(name);
         Assert.assertNotNull("TestUser should Not be null", testUser);
-        log.info("Trnsactional is not working!!!");
+        log.info("@Trnsactional is not working!!!");
+    }
+
+    @Test
+    public void shouldNotSave_whenCallTransactionalMethod_withException_withoutInterface(){
+        String name = "Test3User";
+        TestUser user = TestUser.builder()
+                .name(name)
+                .build();
+        try {
+            userDaoImpl.saveWithTransactionMethodWithException(user);
+        } catch (Exception e) {
+            log.error("Exception thrown. Ex msg {}", e.getMessage());
+        }
+
+        TestUser testUser = userRepository.findByName(name);
+        Assert.assertNull("TestUser should be null", testUser);
+        log.info("@Trnsactional not working!!!");
+    }
+
+    @Test
+    public void shouldSave_whenCallNonTransactionalMethod_withInClassTransactionalMethod_withoutInterface(){
+        String name = "Test4User";
+        TestUser user = TestUser.builder()
+                .name(name)
+                .build();
+        try {
+            userDaoImpl.saveWithSameClassTrxTransactionalMethodCall(user);
+        } catch (Exception e) {
+            log.error("Exception thrown. Ex msg {}", e.getMessage());
+        }
+
+        TestUser testUser = userRepository.findByName(name);
+        Assert.assertNotNull("TestUser should Not be null", testUser);
+        log.info("@Trnsactional is not working!!!");
     }
 }
