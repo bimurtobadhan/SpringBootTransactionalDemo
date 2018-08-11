@@ -26,9 +26,9 @@ public class SpingTransactionalDemoApplication implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        userDao.saveUser(TestUser.builder()
-                            .name("Name" + random.nextInt())
-                            .build()
-                );
+//        userDao.saveWithSameClassTrxTransactionalMethodCall(TestUser.builder()
+//                            .name("Name" + random.nextInt())
+//                            .build()
+//                );
     }
 }

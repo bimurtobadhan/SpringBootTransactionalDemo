@@ -17,13 +17,14 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void saveWithSameClassTrxTransactionalMethodCall(TestUser user){
         saveWithTransactionMethod(user);
-        throw new RuntimeException();
+
     }
 
     @Transactional
     public void saveWithTransactionMethod(TestUser user){
         TestUser testUser = userRepository.save(user);
         log.info("Saved in DB. User {}", testUser);
+        throw new RuntimeException();
     }
 
     @Transactional
