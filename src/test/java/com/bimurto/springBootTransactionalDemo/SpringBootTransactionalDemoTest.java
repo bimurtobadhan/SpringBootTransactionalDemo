@@ -99,4 +99,36 @@ public class SpringBootTransactionalDemoTest {
         Assert.assertNotNull("TestUser should Not be null", testUser);
         log.info("@Trnsactional is not working!!!");
     }
+
+    @Test
+    public void shouldUpdate_whenCall_TransactionalMethod_direct(){
+        String name = "Test5User";
+        String updatedname = "Test5User"+"updated";
+        TestUser user = TestUser.builder()
+                .name(name)
+                .build();
+        userRepository.save(user);
+
+        userDao.updateWithTransactionMethodWithNoExplicitSave(name);
+
+        TestUser testUser = userRepository.findByName(updatedname);
+        Assert.assertNotNull("TestUser should Not be null", testUser);
+        log.info("Trnsactional is working!!!");
+    }
+
+    @Test
+    public void shouldNotUpdate_whenCall_TransactionalMethod_WithInClassMethod(){
+        String name = "Test6User";
+        String updatedname = name + "updated";
+        TestUser user = TestUser.builder()
+                .name(name)
+                .build();
+        userRepository.save(user);
+
+        userDao.updateWithSameClassTrxTransactionalMethodCallWithNoExplicitSave(name);
+
+        TestUser testUser = userRepository.findByName(updatedname);
+        Assert.assertNull("TestUser should be null", testUser);
+        log.info("Trnsactional is not working!!!");
+    }
 }

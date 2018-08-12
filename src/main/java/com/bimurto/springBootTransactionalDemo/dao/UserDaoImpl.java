@@ -35,5 +35,17 @@ public class UserDaoImpl implements UserDao{
         throw new RuntimeException();
     }
 
+    @Transactional
+    @Override
+    public void updateWithTransactionMethodWithNoExplicitSave(String name){
+        TestUser testUser = userRepository.findByName(name);
+        log.info("Found in DB. User {}", testUser);
+        testUser.setName(name+"updated");
+    }
+
+    @Override
+    public void updateWithSameClassTrxTransactionalMethodCallWithNoExplicitSave(String name){
+        updateWithTransactionMethodWithNoExplicitSave(name);
+    }
 
 }
