@@ -29,7 +29,7 @@ public class MixedDaoImpl implements MixedDao{
         user.setName(updatedname);
 
         TestProduct product = TestProduct.builder()
-                .productName("productname")
+                .productName(user.getName())
                 .build();
 
         productRepository.save(product);

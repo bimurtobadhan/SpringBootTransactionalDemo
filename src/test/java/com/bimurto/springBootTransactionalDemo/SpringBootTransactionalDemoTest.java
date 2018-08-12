@@ -144,7 +144,7 @@ public class SpringBootTransactionalDemoTest {
     @Test
     public void shouldNotUpdateUser_WhenUpdateUserButSaveProduct_inNonTransactionalMethod(){
         String name = "Test7User";
-        String productname = "productname";
+//        String productname = "productname";
         String updatedname = name + "updated";
         TestUser user = TestUser.builder()
                 .name(name)
@@ -153,8 +153,8 @@ public class SpringBootTransactionalDemoTest {
 
         mixedDao.wrappermethodForupdateUserAndSaveProduct(savedUser);
 
-        TestProduct product = productRepository.findByProductName(productname);
-        Assert.assertEquals("Name should be same", productname, product.getProductName());
+        TestProduct product = productRepository.findByProductName(updatedname);
+        Assert.assertEquals("Name should be same", updatedname, product.getProductName());
 
         TestUser testUser = userRepository.findByName(updatedname);
         Assert.assertNull("TestUser should be null", testUser);
