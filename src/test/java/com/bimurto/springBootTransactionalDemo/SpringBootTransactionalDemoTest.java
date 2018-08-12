@@ -1,8 +1,11 @@
 package com.bimurto.springBootTransactionalDemo;
 
+import com.bimurto.springBootTransactionalDemo.dao.MixedDao;
 import com.bimurto.springBootTransactionalDemo.dao.UserDao;
 import com.bimurto.springBootTransactionalDemo.dao.UserDaoImplNoInterface;
+import com.bimurto.springBootTransactionalDemo.domain.TestProduct;
 import com.bimurto.springBootTransactionalDemo.domain.TestUser;
+import com.bimurto.springBootTransactionalDemo.repo.ProductRepository;
 import com.bimurto.springBootTransactionalDemo.repo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -26,6 +29,12 @@ public class SpringBootTransactionalDemoTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private MixedDao mixedDao;
 
     @Test
     public void contextLoads(){
@@ -126,6 +135,26 @@ public class SpringBootTransactionalDemoTest {
         userRepository.save(user);
 
         userDao.updateWithSameClassTrxTransactionalMethodCallWithNoExplicitSave(name);
+
+        TestUser testUser = userRepository.findByName(updatedname);
+        Assert.assertNull("TestUser should be null", testUser);
+        log.info("Trnsactional is not working!!!");
+    }
+
+    @Test
+    public void shouldNotUpdateUser_WhenUpdateUserButSaveProduct_inNonTransactionalMethod(){
+        String name = "Test7User";
+        String productname = "productname";
+        String updatedname = name + "updated";
+        TestUser user = TestUser.builder()
+                .name(name)
+                .build();
+        TestUser savedUser = userRepository.save(user);
+
+        mixedDao.wrappermethodForupdateUserAndSaveProduct(savedUser);
+
+        TestProduct product = productRepository.findByProductName(productname);
+        Assert.assertEquals("Name should be same", productname, product.getProductName());
 
         TestUser testUser = userRepository.findByName(updatedname);
         Assert.assertNull("TestUser should be null", testUser);
